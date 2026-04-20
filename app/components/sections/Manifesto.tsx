@@ -73,9 +73,9 @@ export default function ManifestoSection() {
         
         <div className="counter-row flex gap-8 justify-center flex-wrap mt-14 pt-10 border-t border-white/5">
           {[
-            { target: 2400, suffix: "", label: "Developers Trained", delay: "0.1s" },
-            { target: 98, suffix: "%", label: "Satisfaction", delay: "0.2s" },
-            { target: 12, suffix: "", label: "Avg Weeks to Ship", delay: "0.3s" }
+            { target: 27, suffix: "+", label: "Developers Trained", delay: "0.1s" },
+            { target: 99, suffix: "%", label: "Satisfaction", delay: "0.2s" },
+            { target: "<24", suffix: "", label: "Hours to Ship", delay: "0.3s" }
           ].map((counter, i) => (
             <RevealWrapper key={i} delay={counter.delay}>
               <div className="counter-item text-center min-w-30">

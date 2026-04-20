@@ -65,9 +65,11 @@ export default function Navbar() {
 
         {/* Right Section */}
         <div className="nav-right flex items-center gap-4 shrink-0">
-          <button className="nav-btn bg-yellow text-dark py-2 px-4 font-space-grotesk font-black text-xs tracking-widest uppercase border-none cursor-pointer relative overflow-hidden transition-all duration-300 [clip-path:var(--clip-path-angled-btn)] whitespace-nowrap hover:before:translate-x-0 before:content-[''] before:absolute before:inset-0 before:bg-white before:transform before:-translate-x-full before:transition-transform before:duration-300">
-            <span className="relative z-10">JOIN_CORE</span>
-          </button>
+            <Link href={"https://docs.google.com/forms/d/e/1FAIpQLScjk2oEwq5aI8zD5Jq0Nv51MqUtCexuglCki0RBBSy6tei2GQ/viewform?usp=dialog"}>
+                <button className="nav-btn bg-yellow text-dark py-2 px-4 font-space-grotesk font-black text-xs tracking-widest uppercase border-none cursor-pointer relative overflow-hidden transition-all duration-300 [clip-path:var(--clip-path-angled-btn)] whitespace-nowrap hover:before:translate-x-0 before:content-[''] before:absolute before:inset-0 before:bg-white before:transform before:-translate-x-full before:transition-transform before:duration-300">
+                    <span className="relative z-10">JOIN_CORE</span>
+                </button>
+            </Link>
           <button 
             className={`hamburger flex flex-col gap-1.25 bg-none border-none cursor-pointer p-1 mobile-only ${mobileMenuOpen ? 'open' : ''}`}
             onClick={toggleMobileMenu}
