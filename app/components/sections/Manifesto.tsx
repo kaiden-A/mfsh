@@ -75,7 +75,7 @@ export default function ManifestoSection() {
           {[
             { target: 27, suffix: "+", label: "Developers Trained", delay: "0.1s" },
             { target: 99, suffix: "%", label: "Satisfaction", delay: "0.2s" },
-            { target: "<24", suffix: "", label: "Hours to Ship", delay: "0.3s" }
+            { target: 24, suffix: "", label: "Hours to Ship", delay: "0.3s" }
           ].map((counter, i) => (
             <RevealWrapper key={i} delay={counter.delay}>
               <div className="counter-item text-center min-w-30">
