@@ -24,7 +24,7 @@ export default function Hero() {
         <Link href={"https://docs.google.com/forms/d/e/1FAIpQLScjk2oEwq5aI8zD5Jq0Nv51MqUtCexuglCki0RBBSy6tei2GQ/viewform?usp=dialog"}>
             <button className="btn-primary bg-yellow text-dark py-3.5 px-8 font-space-grotesk font-black text-[clamp(0.8rem,2vw,1rem)] tracking-widest uppercase border-none cursor-pointer relative overflow-hidden [clip-path:var(--clip-path-angled-btn-lg)] transition-transform duration-300 hover:translate-y-1 hover:shadow-[0_12px_40px_rgba(234,234,0,0.35)] after:content-[''] after:absolute after:inset-0 after:bg-[linear-gradient(135deg,transparent_30%,rgba(255,255,255,0.3)_50%,transparent_70%)] after:transform after:-translate-x-full after:transition-transform after:duration-500 hover:after:translate-x-full">
             <span className="material-symbols-outlined align-middle mr-1.5 text-base">rocket_launch</span>
-            INITIALIZE_CORE
+            REGISTER_NOW
             </button>
         </Link>
       </div>
