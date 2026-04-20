@@ -1,21 +1,25 @@
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Footer() {
   return (
     <footer className="border-t-2 border-[rgba(109,40,217,0.3)] bg-[#0a0a0d] py-10 px-5 relative z-10 mt-12">
       <div className="footer-inner max-w-7xl mx-auto flex justify-between items-end gap-8 flex-wrap">
         <div>
-          <div className="footer-logo font-space-grotesk font-black text-2xl text-text flex items-center gap-2 mb-1">
-            <svg width="28" height="28" viewBox="0 0 36 36" fill="none">
-              <rect width="36" height="36" rx="3" fill="#eaea00"/>
-              <path d="M8 10 L18 26 L28 10" stroke="#131318" strokeWidth="3.5" strokeLinecap="square" strokeLinejoin="miter" fill="none"/>
-              <path d="M13 10 L18 19 L23 10" stroke="#131318" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter" fill="none" opacity="0.45"/>
-            </svg>
+        <div className="footer-logo font-space-grotesk font-black text-2xl text-text flex items-center gap-2 mb-1">
+            <div className="relative w-7 h-7 shrink-0"> 
+            <Image 
+                src="/logo.png" 
+                alt="Motion-U Logo" 
+                fill
+                className="object-contain"
+            />
+            </div>
             Motion-U
-          </div>
-          <p className="footer-copy text-xs tracking-widest uppercase text-[#5a5866]">
+        </div>
+        <p className="footer-copy text-xs tracking-widest uppercase text-[#5a5866]">
             ©2026 Motion-U Club — All Rights Reserved
-          </p>
+        </p>
         </div>
         
         <div className="footer-links flex gap-10 flex-wrap">

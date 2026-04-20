@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Navbar() {
   const [activeTab, setActiveTab] = useState<"VueJS" | "PocketBase">("VueJS");
@@ -28,14 +29,18 @@ export default function Navbar() {
         
         {/* Logo */}
         <Link href="#" className="logo flex items-center gap-2.5 no-underline shrink-0">
-          <svg className="logo-mark w-9 h-9 shrink-0" viewBox="0 0 36 36" fill="none">
-            <rect width="36" height="36" rx="4" fill="#eaea00"/>
-            <path d="M8 10 L18 26 L28 10" stroke="#131318" strokeWidth="3.5" strokeLinecap="square" strokeLinejoin="miter" fill="none"/>
-            <path d="M13 10 L18 19 L23 10" stroke="#131318" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter" fill="none" opacity="0.45"/>
-          </svg>
-          <span className="logo-text font-space-grotesk font-black text-xl italic text-yellow tracking-tighter whitespace-nowrap">
+        <div className="logo-mark w-9 h-9 shrink-0 relative">
+            <Image 
+            src="/logo.png" 
+            alt="Motion-U Logo" 
+            fill 
+            className="object-contain"
+            priority // Ensures the logo loads immediately
+            />
+        </div>
+        <span className="logo-text font-space-grotesk font-black text-xl italic text-yellow tracking-tighter whitespace-nowrap">
             Motion-U
-          </span>
+        </span>
         </Link>
 
         {/* Desktop Tabs */}
