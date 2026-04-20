@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://mfsh.motionukict.com
+
+# Sitemaps
+Sitemap: https://mfsh.motionukict.com/sitemap.xml
