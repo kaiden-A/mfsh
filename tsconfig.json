@@ -29,6 +29,6 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts"
-  ],
+, "app/components/Chat.jsx", "app/components/ScrollProgress.jsx", "app/components/CustomCursor.jsx", "app/components/BackgroundCanvas.jsx"  ],
   "exclude": ["node_modules"]
 }
