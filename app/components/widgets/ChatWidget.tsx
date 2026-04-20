@@ -55,10 +55,7 @@ export default function ChatWidget() {
     // Simulate AI response (replace with actual API call)
     setTimeout(() => {
       const responses = [
-        "Great question! Vue 3's Composition API gives you better TypeScript inference and logic reuse. 🎯",
-        "PocketBase handles auth, database, and file storage in one 15MB binary. Deploy anywhere! ⚡",
-        "Our curriculum is project-based. You'll ship 8 production-ready apps by week 12. 🚀",
-        "TypeScript is non-negotiable here. We teach advanced types from day one. 💪"
+        "Sorry, currently athena is not working, if you want to talk to athena visit https://athena.motionukict.com"
       ];
       const randomResponse = responses[Math.floor(Math.random() * responses.length)];
       addMessage(randomResponse, false);
