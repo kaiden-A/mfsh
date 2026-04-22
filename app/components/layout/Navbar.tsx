@@ -5,11 +5,11 @@ import Link from "next/link";
 import Image from "next/image";
 
 export default function Navbar() {
-  const [activeTab, setActiveTab] = useState<"VueJS" | "PocketBase">("VueJS");
+  const [activeTab, setActiveTab] = useState<"VueJS" | "PocketBase" | "BasicWeb">();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
-  const handleTabClick = (tab: "VueJS" | "PocketBase") => {
+  const handleTabClick = (tab: "VueJS" | "PocketBase" | "BasicWeb") => {
     setActiveTab(tab);
     if (mobileMenuOpen) setMobileMenuOpen(false);
   };
@@ -45,6 +45,14 @@ export default function Navbar() {
 
         {/* Desktop Tabs */}
         <div className="nav-tabs flex gap-0 border border-outline overflow-hidden shrink-0 desktop-only">
+          <button 
+            className={`nav-tab px-4 py-2 font-space-grotesk font-bold text-xs tracking-widest uppercase bg-transparent border-none cursor-pointer relative transition-all duration-250 whitespace-nowrap hover:text-white hover:bg-white/4 ${
+              activeTab === "BasicWeb" ? 'text-yellow after:scale-x-100' : 'text-white/55 after:scale-x-0'
+            } after:content-[''] after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-yellow after:transform after:transition-transform after:duration-250`}
+            onClick={() => handleTabClick("BasicWeb")}
+          >
+            Basic Web
+          </button>
           <button 
             className={`nav-tab px-4 py-2 font-space-grotesk font-bold text-xs tracking-widest uppercase bg-transparent border-none cursor-pointer relative transition-all duration-250 whitespace-nowrap hover:text-white hover:bg-white/4 ${
               activeTab === "VueJS" ? 'text-yellow after:scale-x-100' : 'text-white/55 after:scale-x-0'
@@ -90,6 +98,12 @@ export default function Navbar() {
       >
         <p className="tab-label text-xs text-muted tracking-widest px-6 pt-5 pb-2">Track</p>
         <div className="mobile-menu-tabs flex gap-0 m-4 border border-outline">
+          <button 
+            className={`flex-1 text-center py-2.5 border-none ${activeTab === "BasicWeb" ? 'text-yellow bg-yellow/8' : ''}`}
+            onClick={() => handleTabClick("BasicWeb")}
+          >
+            Basic Web
+          </button>
           <button 
             className={`flex-1 text-center py-2.5 border-none ${activeTab === "VueJS" ? 'text-yellow bg-yellow/8' : ''}`}
             onClick={() => handleTabClick("VueJS")}
