@@ -57,7 +57,7 @@ export default function ChatWidget() {
         className="chat-fab fixed bottom-6 right-6 z-100 w-14 h-14 rounded-full bg-[linear-gradient(135deg,var(--color-purple),var(--color-yellow))] flex items-center justify-center cursor-pointer border-none shadow-[0_4px_20px_rgba(0,0,0,0.4)] animate-fab-float transition-transform hover:scale-110 active:scale-95"
         onClick={toggleChat}
       >
-        <img src="/athena.png" alt="Athena" className="w-8 h-8 object-contain" />
+        <img src="/athena_logo_black.png" alt="Athena" className="w-33 h-33 object-contain" />
       </button>
       
       {/* Chat Window */}
@@ -66,7 +66,7 @@ export default function ChatWidget() {
         {/* Header */}
         <div className="chat-header p-4 bg-white/5 border-b border-white/10 flex items-center gap-3">
           <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-purple-500 to-yellow-500 flex items-center justify-center animate-pulse">
-            <img src="/athena.png" alt="Avatar" className="w-6 h-6 object-contain" />
+            <img src="/athena_logo_black.png" alt="Avatar" className="w-20 h-20 object-contain" />
           </div>
           <div>
             <p className="font-bold text-white text-sm">Athena</p>
