@@ -9,7 +9,7 @@ export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
-  const handleTabClick = (tab: "VueJS" | "PocketBase" | "BasicWeb") => {
+  const handleTabClick = (tab: "installations" | "VueJS" | "PocketBase" | "BasicWeb") => {
     setActiveTab(tab);
     if (mobileMenuOpen) setMobileMenuOpen(false);
   };
