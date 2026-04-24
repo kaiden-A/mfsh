@@ -57,7 +57,7 @@ export default function ChatWidget() {
         className="chat-fab fixed bottom-6 right-6 z-100 w-14 h-14 rounded-full bg-[linear-gradient(135deg,var(--color-purple),var(--color-yellow))] flex items-center justify-center cursor-pointer border-none shadow-[0_4px_20px_rgba(0,0,0,0.4)] animate-fab-float transition-transform hover:scale-110 active:scale-95"
         onClick={toggleChat}
       >
-        <img src="/athena_logo_black.png" alt="Athena" className="w-33 h-33 object-contain" />
+        <img src="/athena_logo.png" alt="Athena" className="w-33 h-33 object-contain" />
       </button>
       
       {/* Chat Window */}
@@ -66,7 +66,7 @@ export default function ChatWidget() {
         {/* Header */}
         <div className="chat-header p-4 bg-white/5 border-b border-white/10 flex items-center gap-3">
           <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-purple-500 to-yellow-500 flex items-center justify-center animate-pulse">
-            <img src="/athena_logo_black.png" alt="Avatar" className="w-20 h-20 object-contain" />
+            <img src="/athena_logo.png" alt="Avatar" className="w-22 h-22 object-contain" />
           </div>
           <div>
             <p className="font-bold text-white text-sm">Athena</p>
@@ -80,7 +80,7 @@ export default function ChatWidget() {
             <div key={msg.id} className={`flex gap-2 ${msg.isUser ? 'flex-row-reverse' : 'flex-row'}`}>
               {!msg.isUser && (
                 <div className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center shrink-0 border border-white/10">
-                  <img src="/athena.png" alt="AI" className="w-4 h-4 object-contain" />
+                  <img src="/athena_logo_v3.svg" alt="AI" className="w-22 h-22 object-contain" />
                 </div>
               )}
               <div className={`max-w-[80%] p-3 rounded-2xl text-sm ${msg.isUser ? 'bg-purple-600 text-white' : 'bg-[#232329] text-gray-200'}`}>
