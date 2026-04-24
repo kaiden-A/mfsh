@@ -1,7 +1,7 @@
 // app/basic-web/page.tsx
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import Navbar from '../components/layout/Navbar'
 import Footer from '../components/layout/Footer'
 
@@ -422,21 +422,50 @@ async function addUser() {
   )
 
   // Code block component
-  const CodeBlock = ({ title, code, language = 'vue' }: CodeBlock) => (
-    <div className="my-4 rounded-lg overflow-hidden border border-[var(--color-outline)]">
+const CodeBlock = ({ title, code, language = 'vue' }: CodeBlock) => {
+  const [copied, setCopied] = useState(false)
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(code)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch (err) {
+      console.error('Failed to copy code:', err)
+    }
+  }
+
+  return (
+    <div className="my-4 rounded-lg overflow-hidden border border-[var(--color-outline)] group">
       <div className="bg-[var(--color-dark3)] py-2 px-4 flex items-center justify-between border-b border-[var(--color-outline)]">
-        <span className="font-[var(--mono)] text-xs text-[var(--color-muted)]">{title}</span>
-        <div className="flex gap-1.5">
-          <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
-          <span className="w-2.5 h-2.5 rounded-full bg-[#febc2e]" />
-          <span className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
+        <span className="font-[var(--mono)] text-xs text-[var(--color-muted)] truncate">{title}</span>
+        <div className="flex items-center gap-2">
+          {/* Copy Button */}
+          <button
+            onClick={handleCopy}
+            className="font-[var(--mono)] text-xs flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[var(--color-dark2)] border border-[var(--color-outline)] text-[var(--color-muted)] hover:text-[var(--color-text)] hover:border-[var(--color-lime)] transition-all focus:outline-none focus:ring-1 focus:ring-[var(--color-lime)]"
+            aria-label={copied ? 'Copied to clipboard' : 'Copy code to clipboard'}
+            title={copied ? 'Copied!' : 'Copy code'}
+          >
+            <span className="material-symbols-outlined text-sm">
+              {copied ? 'check' : 'content_copy'}
+            </span>
+            <span className="hidden sm:inline">{copied ? 'Copied!' : 'Copy'}</span>
+          </button>
+          {/* Window Controls */}
+          <div className="flex gap-1.5 flex-shrink-0">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
+            <span className="w-2.5 h-2.5 rounded-full bg-[#febc2e]" />
+            <span className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
+          </div>
         </div>
       </div>
-      <pre className="bg-[#0e0e12] text-[var(--color-muted)] p-4 font-[var(--mono)] text-xs leading-relaxed overflow-x-auto m-0">
+      <pre className="bg-[#0e0e12] text-[var(--color-muted)] p-4 font-[var(--mono)] text-xs leading-relaxed overflow-x-auto m-0 tab-size-2">
         <code className="whitespace-pre break-normal">{code}</code>
       </pre>
     </div>
   )
+}
 
   return (
     <div className="min-h-screen bg-[var(--color-dark)] text-[var(--color-text)] font-[var(--sans)]">
@@ -526,7 +555,113 @@ async function addUser() {
               </p>
             </div>
 
-            <h3 className="font-semibold mt-6 mb-3">Setting up with Vite</h3>
+            {/* ══ NEW: Documents vs Applications ══ */}
+            <h3 className="font-semibold mt-8 mb-3">Understanding the Shift: Documents vs. Applications</h3>
+            <p className="text-sm text-[var(--color-muted)] leading-relaxed mb-4">
+              Before we write our first line of code, it is essential to understand that we are not just learning 
+              a new tool; we are adopting a <strong>different mindset</strong> for how a website works. In the 
+              traditional approach, we build <strong>documents</strong>. In the Vue.js approach, we build an <strong>application</strong>.
+            </p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-5">
+              {/* MPA Card */}
+              <div className="bg-[var(--color-dark2)] border border-[var(--color-outline)] rounded-lg p-4">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-lg">🗂️</span>
+                  <h4 className="font-semibold text-sm">Traditional Website (MPA)</h4>
+                </div>
+                <p className="text-xs text-[var(--color-muted)] mb-3 leading-relaxed">
+                  Think of a basic HTML website as a physical filing cabinet. Each URL is like pulling out a 
+                  complete, finished sheet of paper — every navigation is a fresh document.
+                </p>
+                <div className="space-y-2">
+                  <div className="flex items-start gap-2 text-xs text-[var(--color-muted)]">
+                    <span className="text-red-400 mt-0.5 shrink-0">①</span>
+                    <span><strong className="text-[var(--color-text)]">Discard</strong> — Browser throws away the current page</span>
+                  </div>
+                  <div className="flex items-start gap-2 text-xs text-[var(--color-muted)]">
+                    <span className="text-red-400 mt-0.5 shrink-0">②</span>
+                    <span><strong className="text-[var(--color-text)]">Request</strong> — Asks the server for the new page</span>
+                  </div>
+                  <div className="flex items-start gap-2 text-xs text-[var(--color-muted)]">
+                    <span className="text-red-400 mt-0.5 shrink-0">③</span>
+                    <span><strong className="text-[var(--color-text)]">Reload</strong> — Entire page redraws from scratch, even unchanged parts like the header and footer</span>
+                  </div>
+                </div>
+                <div className="mt-3 pt-3 border-t border-[var(--color-outline)]">
+                  <span className="text-xs bg-red-500/10 text-red-400 border border-red-500/20 rounded px-2 py-0.5">
+                    Full page disruption on every navigation
+                  </span>
+                </div>
+              </div>
+
+              {/* SPA Card */}
+              <div className="bg-[var(--color-dark2)] border border-[var(--color-lime)]/30 rounded-lg p-4">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-lg">🧩</span>
+                  <h4 className="font-semibold text-sm">Vue.js App (SPA)</h4>
+                </div>
+                <p className="text-xs text-[var(--color-muted)] mb-3 leading-relaxed">
+                  One persistent application surface. Vue manages a single HTML shell (<code className="font-mono bg-[var(--color-dark3)] px-1 rounded">index.html</code>) 
+                  and uses JavaScript to swap content inside it — no full reloads.
+                </p>
+                <div className="space-y-2">
+                  <div className="flex items-start gap-2 text-xs text-[var(--color-muted)]">
+                    <span className="text-[var(--color-lime)] mt-0.5 shrink-0">✓</span>
+                    <span>Header &amp; Footer <strong className="text-[var(--color-text)]">stay mounted</strong> — not re-rendered</span>
+                  </div>
+                  <div className="flex items-start gap-2 text-xs text-[var(--color-muted)]">
+                    <span className="text-[var(--color-lime)] mt-0.5 shrink-0">✓</span>
+                    <span>Only the <strong className="text-[var(--color-text)]">changed component</strong> is swapped out</span>
+                  </div>
+                  <div className="flex items-start gap-2 text-xs text-[var(--color-muted)]">
+                    <span className="text-[var(--color-lime)] mt-0.5 shrink-0">✓</span>
+                    <span>Navigation feels <strong className="text-[var(--color-text)]">instant and native</strong> — like a mobile app</span>
+                  </div>
+                </div>
+                <div className="mt-3 pt-3 border-t border-[var(--color-outline)]">
+                  <span className="text-xs bg-[var(--color-lime)]/10 text-[var(--color-lime)] border border-[var(--color-lime)]/20 rounded px-2 py-0.5">
+                    Lightning-fast, fluid navigation
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <h4 className="font-semibold text-sm mt-6 mb-2">The Concept of 'Components'</h4>
+            <p className="text-sm text-[var(--color-muted)] leading-relaxed mb-3">
+              The secret to the SPA model is <strong>Components</strong>. In Vue, we break everything down into 
+              independent, interlocking blocks — like puzzle pieces that snap together to form a complete UI.
+            </p>
+
+            <div className="bg-[var(--color-dark2)] border border-[var(--color-outline)] rounded-lg p-4 my-4">
+              <h4 className="font-semibold text-sm mb-3">Everything is a Component</h4>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                {[
+                  { label: 'Button', icon: '🔘', desc: 'Smallest unit' },
+                  { label: 'Header', icon: '📌', desc: 'Shared across routes' },
+                  { label: 'Sidebar', icon: '📋', desc: 'Holds sub-components' },
+                  { label: 'Page', icon: '📄', desc: 'A component of components' },
+                ].map(item => (
+                  <div key={item.label} className="bg-[var(--color-dark3)] rounded p-3 text-center">
+                    <div className="text-2xl mb-1">{item.icon}</div>
+                    <div className="text-xs font-semibold">{item.label}</div>
+                    <div className="text-xs text-[var(--color-muted)] mt-0.5">{item.desc}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="border-l-3 border-[var(--color-purple)] bg-[var(--color-purple)]/5 rounded-r-lg p-3 my-4">
+              <p className="text-sm text-[var(--color-muted)]">
+                <strong>Key insight:</strong> When navigating from 'Home' to 'About', Vue keeps the Header 
+                and Footer mounted and simply swaps the main content component. This uses far less data and 
+                creates a smooth, fluid experience that feels like a native mobile app rather than a clunky 
+                sequence of page loads.
+              </p>
+            </div>
+
+            {/* ══ VITE SETUP ══ */}
+            <h3 className="font-semibold mt-8 mb-3">Setting up with Vite</h3>
             <p className="text-sm text-[var(--color-muted)] mb-3">
               <strong>Vite</strong> (French: "veet") is a local development server created by Evan You, 
               the creator of Vue.js. It supports TypeScript, JSX, and uses Rollup/esbuild for bundling.

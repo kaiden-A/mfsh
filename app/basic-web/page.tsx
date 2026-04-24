@@ -1,7 +1,7 @@
 // app/basic-web/page.tsx
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import Navbar from '../components/layout/Navbar'
 import Footer from '../components/layout/Footer'
 
@@ -27,6 +27,56 @@ interface ConceptCard {
 interface TipCard {
   title: string
   desc: string
+}
+
+// Reusable Code Block Component with Copy Button
+interface CodeBlockProps {
+  filename: string
+  code: string
+  language?: string
+  highlight?: string
+}
+
+function CodeBlock({ filename, code, language = 'html', highlight }: CodeBlockProps) {
+  const [copied, setCopied] = useState(false)
+
+  const handleCopy = useCallback(async () => {
+    try {
+      await navigator.clipboard.writeText(code)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch (err) {
+      console.error('Failed to copy:', err)
+    }
+  }, [code])
+
+  return (
+    <div className="my-4 md:my-5 rounded-lg overflow-hidden border border-[var(--color-outline)] group">
+      <div className="bg-[var(--color-dark3)] py-2 px-4 flex items-center justify-between border-b border-[var(--color-outline)]">
+        <span className="font-[var(--mono)] text-xs md:text-sm text-[var(--color-muted)] truncate">{filename}</span>
+        <div className="flex items-center gap-2 flex-shrink-0">
+          <button
+            onClick={handleCopy}
+            className="font-[var(--mono)] text-xs flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[var(--color-dark2)] border border-[var(--color-outline)] text-[var(--color-muted)] hover:text-[var(--color-text)] hover:border-[var(--color-lime)] transition-all"
+            aria-label={copied ? 'Copied to clipboard' : 'Copy code to clipboard'}
+          >
+            <span className="material-symbols-outlined text-sm">
+              {copied ? 'check' : 'content_copy'}
+            </span>
+            <span className="hidden sm:inline">{copied ? 'Copied!' : 'Copy'}</span>
+          </button>
+          <div className="flex gap-1.5">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
+            <span className="w-2.5 h-2.5 rounded-full bg-[#febc2e]" />
+            <span className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
+          </div>
+        </div>
+      </div>
+      <pre className="bg-[#0e0e12] text-[var(--color-muted)] p-4 font-[var(--mono)] text-xs md:text-sm leading-relaxed overflow-x-auto m-0 tab-size-2">
+        <code className="whitespace-pre break-normal">{code}</code>
+      </pre>
+    </div>
+  )
 }
 
 export default function BasicWebDevPage() {
@@ -393,19 +443,10 @@ export default function BasicWebDevPage() {
                 </div>
               </div>
 
-              {/* Code Block - Responsive */}
-              <div className="my-4 md:my-5 rounded-lg overflow-hidden border border-[var(--color-outline)]">
-                <div className="bg-[var(--color-dark3)] py-2 px-4 flex items-center justify-between border-b border-[var(--color-outline)]">
-                  <span className="font-[var(--mono)] text-xs md:text-sm text-[var(--color-muted)] truncate">Counter.vue</span>
-                  <div className="flex gap-1.5 flex-shrink-0">
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#febc2e]" />
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
-                  </div>
-                </div>
-                <pre className="bg-[#0e0e12] text-[var(--color-muted)] p-4 font-[var(--mono)] text-xs md:text-sm leading-relaxed overflow-x-auto m-0 tab-size-2">
-                  <code className="whitespace-pre break-normal">
-{`<script setup>
+              {/* Code Block - Counter */}
+              <CodeBlock
+                filename="Counter.vue"
+                code={`<script setup>
     import { ref, computed } from 'vue'
 
     // ref() creates a reactive number
@@ -421,9 +462,7 @@ export default function BasicWebDevPage() {
     <button @click="count++">Increment</button>
     <button @click="count = 0">Reset</button>
 </template>`}
-                  </code>
-                </pre>
-              </div>
+              />
 
               {/* Activity */}
               <div className="bg-[var(--color-dark2)] border border-[var(--color-outline)] rounded-lg py-3 px-4 my-4 md:my-5">
@@ -471,18 +510,9 @@ export default function BasicWebDevPage() {
               </div>
 
               {/* Code Block - CardList */}
-              <div className="my-4 md:my-5 rounded-lg overflow-hidden border border-[var(--color-outline)]">
-                <div className="bg-[var(--color-dark3)] py-2 px-4 flex items-center justify-between border-b border-[var(--color-outline)]">
-                  <span className="font-[var(--mono)] text-xs md:text-sm text-[var(--color-muted)] truncate">CardList.vue — Single-File Component</span>
-                  <div className="flex gap-1.5 flex-shrink-0">
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#febc2e]" />
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
-                  </div>
-                </div>
-                <pre className="bg-[#0e0e12] text-[var(--color-muted)] p-4 font-[var(--mono)] text-xs md:text-sm leading-relaxed overflow-x-auto m-0 tab-size-2">
-                  <code className="whitespace-pre break-normal">
-{`<script setup>
+              <CodeBlock
+                filename="CardList.vue — Single-File Component"
+                code={`<script setup>
     // defineProps receives data from a parent component
     const props = defineProps({ items: Array })
 </script>
@@ -504,9 +534,7 @@ export default function BasicWebDevPage() {
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
 }
 </style>`}
-                  </code>
-                </pre>
-              </div>
+              />
 
               <hr className="border-none border-t border-[var(--color-outline)] my-8 md:my-10" />
             </div>
@@ -543,18 +571,9 @@ export default function BasicWebDevPage() {
                 
                 {/* Tab Panels */}
                 <div className={rt === 0 ? 'block' : 'hidden'}>
-                  <div className="my-4 md:my-5 rounded-lg overflow-hidden border border-[var(--color-outline)]">
-                    <div className="bg-[var(--color-dark3)] py-2 px-4 flex items-center justify-between border-b border-[var(--color-outline)]">
-                      <span className="font-[var(--mono)] text-xs md:text-sm text-[var(--color-muted)] truncate">router/index.js</span>
-                      <div className="flex gap-1.5 flex-shrink-0">
-                        <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
-                        <span className="w-2.5 h-2.5 rounded-full bg-[#febc2e]" />
-                        <span className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
-                      </div>
-                    </div>
-                    <pre className="bg-[#0e0e12] text-[var(--color-muted)] p-4 font-[var(--mono)] text-xs md:text-sm leading-relaxed overflow-x-auto m-0 tab-size-2">
-                      <code className="whitespace-pre break-normal">
-{`// router/index.js
+                  <CodeBlock
+                    filename="router/index.js"
+                    code={`// router/index.js
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView    from '../views/HomeView.vue'
 import UserView    from '../views/UserView.vue'
@@ -576,24 +595,13 @@ export default createRouter({
   history: createWebHistory(),
   routes
 })`}
-                      </code>
-                    </pre>
-                  </div>
+                  />
                 </div>
                 
                 <div className={rt === 1 ? 'block' : 'hidden'}>
-                  <div className="my-4 md:my-5 rounded-lg overflow-hidden border border-[var(--color-outline)]">
-                    <div className="bg-[var(--color-dark3)] py-2 px-4 flex items-center justify-between border-b border-[var(--color-outline)]">
-                      <span className="font-[var(--mono)] text-xs md:text-sm text-[var(--color-muted)]">Navigation Guard</span>
-                      <div className="flex gap-1.5 flex-shrink-0">
-                        <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
-                        <span className="w-2.5 h-2.5 rounded-full bg-[#febc2e]" />
-                        <span className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
-                      </div>
-                    </div>
-                    <pre className="bg-[#0e0e12] text-[var(--color-muted)] p-4 font-[var(--mono)] text-xs md:text-sm leading-relaxed overflow-x-auto m-0 tab-size-2">
-                      <code className="whitespace-pre break-normal">
-{`// Runs before every route change
+                  <CodeBlock
+                    filename="Navigation Guard"
+                    code={`// Runs before every route change
 router.beforeEach((to, from, next) => {
   const isLoggedIn = !!localStorage.getItem('token')
   if (to.meta.requiresAuth && !isLoggedIn) {
@@ -602,24 +610,13 @@ router.beforeEach((to, from, next) => {
     next()
   }
 })`}
-                      </code>
-                    </pre>
-                  </div>
+                  />
                 </div>
                 
                 <div className={rt === 2 ? 'block' : 'hidden'}>
-                  <div className="my-4 md:my-5 rounded-lg overflow-hidden border border-[var(--color-outline)]">
-                    <div className="bg-[var(--color-dark3)] py-2 px-4 flex items-center justify-between border-b border-[var(--color-outline)]">
-                      <span className="font-[var(--mono)] text-xs md:text-sm text-[var(--color-muted)]">In a Component</span>
-                      <div className="flex gap-1.5 flex-shrink-0">
-                        <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
-                        <span className="w-2.5 h-2.5 rounded-full bg-[#febc2e]" />
-                        <span className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
-                      </div>
-                    </div>
-                    <pre className="bg-[#0e0e12] text-[var(--color-muted)] p-4 font-[var(--mono)] text-xs md:text-sm leading-relaxed overflow-x-auto m-0 tab-size-2">
-                      <code className="whitespace-pre break-normal">
-{`<script setup>
+                  <CodeBlock
+                    filename="In a Component"
+                    code={`<script setup>
     import { useRouter, useRoute } from 'vue-router'
 
     const router = useRouter()
@@ -635,9 +632,7 @@ router.beforeEach((to, from, next) => {
   <RouterLink to="/about">About</RouterLink>
   <RouterView />
 </template>`}
-                      </code>
-                    </pre>
-                  </div>
+                  />
                 </div>
               </div>
 
@@ -677,18 +672,9 @@ router.beforeEach((to, from, next) => {
               </div>
 
               {/* Code Block - DataFetch */}
-              <div className="my-4 md:my-5 rounded-lg overflow-hidden border border-[var(--color-outline)]">
-                <div className="bg-[var(--color-dark3)] py-2 px-4 flex items-center justify-between border-b border-[var(--color-outline)]">
-                  <span className="font-[var(--mono)] text-xs md:text-sm text-[var(--color-muted)] truncate">DataFetch.vue — GET & POST patterns</span>
-                  <div className="flex gap-1.5 flex-shrink-0">
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#febc2e]" />
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
-                  </div>
-                </div>
-                <pre className="bg-[#0e0e12] text-[var(--color-muted)] p-4 font-[var(--mono)] text-xs md:text-sm leading-relaxed overflow-x-auto m-0 tab-size-2">
-                  <code className="whitespace-pre break-normal">
-{`<script setup>
+              <CodeBlock
+                filename="DataFetch.vue — GET & POST patterns"
+                code={`<script setup>
 import { ref } from 'vue'
 
 const data    = ref(null)
@@ -728,9 +714,7 @@ const submitForm = async (formData) => {
     <li v-for="post in data" :key="post.id">{{ post.title }}</li>
   </ul>
 </template>`}
-                  </code>
-                </pre>
-              </div>
+              />
             </div>
           </section>
 
@@ -751,18 +735,9 @@ const submitForm = async (formData) => {
             </div>
 
             {/* Code - Minimal HTML */}
-            <div className="my-4 md:my-5 rounded-lg overflow-hidden border border-[var(--color-outline)]">
-              <div className="bg-[var(--color-dark3)] py-2 px-4 flex items-center justify-between border-b border-[var(--color-outline)]">
-                <span className="font-[var(--mono)] text-xs md:text-sm text-[var(--color-muted)] truncate">index.html — Minimal page</span>
-                <div className="flex gap-1.5 flex-shrink-0">
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#febc2e]" />
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
-                </div>
-              </div>
-              <pre className="bg-[#0e0e12] text-[var(--color-muted)] p-4 font-[var(--mono)] text-xs md:text-sm leading-relaxed overflow-x-auto m-0 tab-size-2">
-                <code className="whitespace-pre break-normal">
-{`<!DOCTYPE html>
+            <CodeBlock
+              filename="index.html — Minimal page"
+              code={`<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8"/>
@@ -773,9 +748,7 @@ const submitForm = async (formData) => {
   <p>This is a paragraph.</p>
 </body>
 </html>`}
-                </code>
-              </pre>
-            </div>
+            />
 
             {/* Callout */}
             <div className="border-l-3 border-[var(--color-lime)] bg-[var(--color-lime)]/5 rounded-r-lg py-2.5 px-3 my-5 md:my-6">
@@ -787,18 +760,9 @@ const submitForm = async (formData) => {
 
             {/* Page Structure Code */}
             <h3 className="font-[var(--sans)] text-base font-semibold mt-6 md:mt-8 mb-2 text-[var(--color-text)]">Page Structure</h3>
-            <div className="my-4 md:my-5 rounded-lg overflow-hidden border border-[var(--color-outline)]">
-              <div className="bg-[var(--color-dark3)] py-2 px-4 flex items-center justify-between border-b border-[var(--color-outline)]">
-                <span className="font-[var(--mono)] text-xs md:text-sm text-[var(--color-muted)] truncate">layout.html</span>
-                <div className="flex gap-1.5 flex-shrink-0">
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#febc2e]" />
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
-                </div>
-              </div>
-              <pre className="bg-[#0e0e12] text-[var(--color-muted)] p-4 font-[var(--mono)] text-xs md:text-sm leading-relaxed overflow-x-auto m-0 tab-size-2">
-                <code className="whitespace-pre break-normal">
-{`<header>
+            <CodeBlock
+              filename="layout.html"
+              code={`<header>
   <h1>Company Name</h1>
   <nav>
     <a href="/">Home</a>
@@ -815,12 +779,29 @@ const submitForm = async (formData) => {
 <footer>
   <p>© 2025 Company Name</p>
 </footer>`}
-                </code>
-              </pre>
-            </div>
+            />
 
             {/* Common Tags - Tabs */}
             <h3 className="font-[var(--sans)] text-base font-semibold mt-6 md:mt-8 mb-2 text-[var(--color-text)]">Common Tags</h3>
+            <div className="my-4 md:my-5 bg-[var(--color-dark2)] border border-[var(--color-outline)] rounded-lg p-4 md:p-5">
+              <div className="prose prose-invert">
+                <h4 className="text-sm font-semibold text-[var(--color-text)] mb-2">🛠️ Try It Yourself</h4>
+                <p className="text-sm text-[var(--color-muted)] leading-relaxed mb-3">
+                  Want to see these tags in action? Follow these simple steps:
+                </p>
+                <ol className="list-decimal list-inside space-y-1.5 text-sm text-[var(--color-muted)] pl-1">
+                  <li>Copy any code snippet from the tabs below</li>
+                  <li>Open a text editor (Notepad, VS Code, or any editor you prefer)</li>
+                  <li>Create a new file and paste the code inside the <code className="font-[var(--mono)] text-xs bg-[var(--color-dark3)] border border-[var(--color-outline)] text-[var(--color-lime)] px-1 py-0.5 rounded">&lt;body&gt;</code> tags of a basic HTML file</li>
+                  <li>Save the file with a <code className="font-[var(--mono)] text-xs bg-[var(--color-dark3)] border border-[var(--color-outline)] text-[var(--color-lime)] px-1 py-0.5 rounded">.html</code> extension (e.g., <code className="font-[var(--mono)] text-xs bg-[var(--color-dark3)] border border-[var(--color-outline)] text-[var(--color-lime)] px-1 py-0.5 rounded">my-page.html</code>)</li>
+                  <li>Double-click the file to open it in your web browser</li>
+                </ol>
+                <p className="text-xs text-[var(--color-muted)] mt-3 italic">
+                  💡 Pro tip: Use the <strong>Copy</strong> button on each code block to grab the code instantly!
+                </p>
+              </div>
+            </div>
+
             <div className="my-4 md:my-5">
               <div className="flex border-b border-[var(--color-outline)] gap-0 overflow-x-auto scrollbar-hide">
                 {['Lists', 'Links & Images', 'Tables', 'Forms'].map((label, i) => (
@@ -840,10 +821,9 @@ const submitForm = async (formData) => {
               
               {/* Tab Panels */}
               <div className={ht === 0 ? 'block' : 'hidden'}>
-                <div className="my-4 md:my-5 rounded-lg overflow-hidden border border-[var(--color-outline)]">
-                  <pre className="bg-[#0e0e12] text-[var(--color-muted)] p-4 font-[var(--mono)] text-xs md:text-sm leading-relaxed overflow-x-auto m-0 tab-size-2">
-                    <code className="whitespace-pre break-normal">
-{`<!-- Unordered list (bullet points) -->
+                <CodeBlock
+                  filename="lists.html"
+                  code={`<!-- Unordered list (bullet points) -->
 <ul>
   <li>Coffee</li>
   <li>Tea</li>
@@ -856,16 +836,13 @@ const submitForm = async (formData) => {
   <li>Step two</li>
   <li>Step three</li>
 </ol>`}
-                    </code>
-                  </pre>
-                </div>
+                />
               </div>
               
               <div className={ht === 1 ? 'block' : 'hidden'}>
-                <div className="my-4 md:my-5 rounded-lg overflow-hidden border border-[var(--color-outline)]">
-                  <pre className="bg-[#0e0e12] text-[var(--color-muted)] p-4 font-[var(--mono)] text-xs md:text-sm leading-relaxed overflow-x-auto m-0 tab-size-2">
-                    <code className="whitespace-pre break-normal">
-{`<!-- target="_blank" opens in a new tab -->
+                <CodeBlock
+                  filename="links-images.html"
+                  code={`<!-- target="_blank" opens in a new tab -->
 <a href="https://vuejs.org" target="_blank">Vue.js Docs</a>
 
 <!-- alt text shown if image fails to load -->
@@ -876,16 +853,13 @@ const submitForm = async (formData) => {
   <source srcset="photo-small.jpg" media="(max-width: 600px)"/>
   <img src="photo-large.jpg" alt="Photo"/>
 </picture>`}
-                    </code>
-                  </pre>
-                </div>
+                />
               </div>
               
               <div className={ht === 2 ? 'block' : 'hidden'}>
-                <div className="my-4 md:my-5 rounded-lg overflow-hidden border border-[var(--color-outline)]">
-                  <pre className="bg-[#0e0e12] text-[var(--color-muted)] p-4 font-[var(--mono)] text-xs md:text-sm leading-relaxed overflow-x-auto m-0 tab-size-2">
-                    <code className="whitespace-pre break-normal">
-{`<table>
+                <CodeBlock
+                  filename="table.html"
+                  code={`<table>
   <thead>
     <tr><th>Firstname</th><th>Lastname</th><th>Age</th></tr>
   </thead>
@@ -893,16 +867,13 @@ const submitForm = async (formData) => {
     <tr><td>Jill</td><td>Smith</td><td>50</td></tr>
   </tbody>
 </table>`}
-                    </code>
-                  </pre>
-                </div>
+                />
               </div>
               
               <div className={ht === 3 ? 'block' : 'hidden'}>
-                <div className="my-4 md:my-5 rounded-lg overflow-hidden border border-[var(--color-outline)]">
-                  <pre className="bg-[#0e0e12] text-[var(--color-muted)] p-4 font-[var(--mono)] text-xs md:text-sm leading-relaxed overflow-x-auto m-0 tab-size-2">
-                    <code className="whitespace-pre break-normal">
-{`<form action="/submit" method="POST">
+                <CodeBlock
+                  filename="form.html"
+                  code={`<form action="/submit" method="POST">
   <label for="fname">First name:</label>
   <input type="text" id="fname" name="fname"/>
 
@@ -916,9 +887,7 @@ const submitForm = async (formData) => {
 
   <button type="submit">Submit</button>
 </form>`}
-                    </code>
-                  </pre>
-                </div>
+                />
               </div>
             </div>
 
@@ -971,26 +940,15 @@ const submitForm = async (formData) => {
             </div>
 
             {/* Events Code Example */}
-            <div className="my-4 md:my-5 rounded-lg overflow-hidden border border-[var(--color-outline)]">
-              <div className="bg-[var(--color-dark3)] py-2 px-4 flex items-center justify-between border-b border-[var(--color-outline)]">
-                <span className="font-[var(--mono)] text-xs md:text-sm text-[var(--color-muted)] truncate">events.html — Keyboard listener example</span>
-                <div className="flex gap-1.5 flex-shrink-0">
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#febc2e]" />
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
-                </div>
-              </div>
-              <pre className="bg-[#0e0e12] text-[var(--color-muted)] p-4 font-[var(--mono)] text-xs md:text-sm leading-relaxed overflow-x-auto m-0 tab-size-2">
-                <code className="whitespace-pre break-normal">
-{`<input
+            <CodeBlock
+              filename="events.html — Keyboard listener example"
+              code={`<input
   type="text"
   placeholder="Press any key…"
   onkeydown="document.getElementById('out').textContent = 'Key: ' + event.key"
 />
 <p id="out"></p>`}
-                </code>
-              </pre>
-            </div>
+            />
           </section>
 
           {/* ══ CSS ══ */}
@@ -1010,18 +968,9 @@ const submitForm = async (formData) => {
             </div>
 
             {/* CSS Code */}
-            <div className="my-4 md:my-5 rounded-lg overflow-hidden border border-[var(--color-outline)]">
-              <div className="bg-[var(--color-dark3)] py-2 px-4 flex items-center justify-between border-b border-[var(--color-outline)]">
-                <span className="font-[var(--mono)] text-xs md:text-sm text-[var(--color-muted)] truncate">style.css — Linked stylesheet</span>
-                <div className="flex gap-1.5 flex-shrink-0">
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#febc2e]" />
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
-                </div>
-              </div>
-              <pre className="bg-[#0e0e12] text-[var(--color-muted)] p-4 font-[var(--mono)] text-xs md:text-sm leading-relaxed overflow-x-auto m-0 tab-size-2">
-                <code className="whitespace-pre break-normal">
-{`/* Link in HTML: <link rel="stylesheet" href="style.css"> */
+            <CodeBlock
+              filename="style.css — Linked stylesheet"
+              code={`/* Link in HTML: <link rel="stylesheet" href="style.css"> */
 
 body {
   background-color: lightblue;
@@ -1045,24 +994,13 @@ h1 {
   font-size: 2rem;
   font-weight: bold;
 }`}
-                </code>
-              </pre>
-            </div>
+            />
 
             {/* CSS Selectors */}
             <h3 className="font-[var(--sans)] text-base font-semibold mt-6 md:mt-8 mb-2 text-[var(--color-text)]">CSS Selectors</h3>
-            <div className="my-4 md:my-5 rounded-lg overflow-hidden border border-[var(--color-outline)]">
-              <div className="bg-[var(--color-dark3)] py-2 px-4 flex items-center justify-between border-b border-[var(--color-outline)]">
-                <span className="font-[var(--mono)] text-xs md:text-sm text-[var(--color-muted)] truncate">selectors.css</span>
-                <div className="flex gap-1.5 flex-shrink-0">
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#febc2e]" />
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
-                </div>
-              </div>
-              <pre className="bg-[#0e0e12] text-[var(--color-muted)] p-4 font-[var(--mono)] text-xs md:text-sm leading-relaxed overflow-x-auto m-0 tab-size-2">
-                <code className="whitespace-pre break-normal">
-{`/* All <p> elements */
+            <CodeBlock
+              filename="selectors.css"
+              code={`/* All <p> elements */
 p { color: red; }
 
 /* Direct children only */
@@ -1088,9 +1026,7 @@ li:last-child  { color: gray; }
 }
 h1 { color: var(--primary); }
 p  { font-size: var(--font-size); }`}
-                </code>
-              </pre>
-            </div>
+            />
 
             {/* Tailwind CSS */}
             <h3 className="font-[var(--sans)] text-base font-semibold mt-6 md:mt-8 mb-2 text-[var(--color-text)]">Tailwind CSS</h3>
@@ -1101,18 +1037,9 @@ p  { font-size: var(--font-size); }`}
             </div>
 
             {/* Tailwind Code */}
-            <div className="my-4 md:my-5 rounded-lg overflow-hidden border border-[var(--color-outline)]">
-              <div className="bg-[var(--color-dark3)] py-2 px-4 flex items-center justify-between border-b border-[var(--color-outline)]">
-                <span className="font-[var(--mono)] text-xs md:text-sm text-[var(--color-muted)] truncate">tailwind-example.html</span>
-                <div className="flex gap-1.5 flex-shrink-0">
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#febc2e]" />
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
-                </div>
-              </div>
-              <pre className="bg-[#0e0e12] text-[var(--color-muted)] p-4 font-[var(--mono)] text-xs md:text-sm leading-relaxed overflow-x-auto m-0 tab-size-2">
-                <code className="whitespace-pre break-normal">
-{`<!-- Traditional CSS approach -->
+            <CodeBlock
+              filename="tailwind-example.html"
+              code={`<!-- Traditional CSS approach -->
 <div class="card">Hello</div>
 <!-- Then write: .card { padding: 1rem; background: white; } -->
 
@@ -1130,9 +1057,7 @@ p  { font-size: var(--font-size); }`}
 <div class="bg-white dark:bg-gray-900 text-black dark:text-white">
   Adapts to system theme
 </div>`}
-                </code>
-              </pre>
-            </div>
+            />
 
             {/* Callout */}
             <div className="border-l-3 border-[var(--color-lime)] bg-[var(--color-lime)]/5 rounded-r-lg py-2.5 px-3 my-5 md:my-6">
@@ -1165,31 +1090,20 @@ p  { font-size: var(--font-size); }`}
 
             {/* Quick Start Commands */}
             <h3 className="font-[var(--sans)] text-base font-semibold mt-6 md:mt-8 mb-2 text-[var(--color-text)]">Quick Start Commands</h3>
-            <div className="my-4 md:my-5 rounded-lg overflow-hidden border border-[var(--color-outline)]">
-              <div className="bg-[var(--color-dark3)] py-2 px-4 flex items-center justify-between border-b border-[var(--color-outline)]">
-                <span className="font-[var(--mono)] text-xs md:text-sm text-[var(--color-muted)] truncate">terminal</span>
-                <div className="flex gap-1.5 flex-shrink-0">
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#febc2e]" />
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
-                </div>
-              </div>
-              <pre className="bg-[#0e0e12] text-[var(--color-muted)] p-4 font-[var(--mono)] text-xs md:text-sm leading-relaxed overflow-x-auto m-0 tab-size-2">
-                <code className="whitespace-pre break-normal">
-{`# Create a new Vue 3 project (official scaffolding)
+            <CodeBlock
+              filename="terminal"
+              code={`# Create a new Vue 3 project (official scaffolding)
 $ npm create vue@latest my-app
-# Select: TypeScript ✓  Vue Router ✓  ESLint ✓
+# Select: JavaScript ✓  Vue Router ✓  ESLint ✓
 
 # Install dependencies and start dev server
 $ cd my-app && npm install && npm run dev
 # → http://localhost:5173
 
 # Add Tailwind CSS to the project
-$ npm install -D tailwindcss postcss autoprefixer
+$ npm install tailwindcss @tailwindcss/vite
 $ npx tailwindcss init -p`}
-                </code>
-              </pre>
-            </div>
+            />
 
             {/* Resources Callout */}
             <div className="border-l-3 border-[var(--color-lime)] bg-[var(--color-lime)]/5 rounded-r-lg py-2.5 px-3 my-5 md:my-6">

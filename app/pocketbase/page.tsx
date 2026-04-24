@@ -281,21 +281,50 @@ onMounted(async () => {
 </template>`
 
   // Code block component
-  const CodeBlock = ({ title, code, language = 'bash' }: CodeBlock) => (
-    <div className="my-4 rounded-lg overflow-hidden border border-[var(--color-outline)]">
+const CodeBlock = ({ title, code, language = 'bash' }: CodeBlock) => {
+  const [copied, setCopied] = useState(false)
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(code)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch (err) {
+      console.error('Failed to copy code:', err)
+    }
+  }
+
+  return (
+    <div className="my-4 rounded-lg overflow-hidden border border-[var(--color-outline)] group">
       <div className="bg-[var(--color-dark3)] py-2 px-4 flex items-center justify-between border-b border-[var(--color-outline)]">
-        <span className="font-[var(--mono)] text-xs text-[var(--color-muted)]">{title}</span>
-        <div className="flex gap-1.5">
-          <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
-          <span className="w-2.5 h-2.5 rounded-full bg-[#febc2e]" />
-          <span className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
+        <span className="font-[var(--mono)] text-xs text-[var(--color-muted)] truncate">{title}</span>
+        <div className="flex items-center gap-2">
+          {/* Copy Button */}
+          <button
+            onClick={handleCopy}
+            className="font-[var(--mono)] text-xs flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[var(--color-dark2)] border border-[var(--color-outline)] text-[var(--color-muted)] hover:text-[var(--color-text)] hover:border-[var(--color-lime)] transition-all focus:outline-none focus:ring-1 focus:ring-[var(--color-lime)]"
+            aria-label={copied ? 'Copied to clipboard' : 'Copy code to clipboard'}
+            title={copied ? 'Copied!' : 'Copy code'}
+          >
+            <span className="material-symbols-outlined text-sm">
+              {copied ? 'check' : 'content_copy'}
+            </span>
+            <span className="hidden sm:inline">{copied ? 'Copied!' : 'Copy'}</span>
+          </button>
+          {/* Window Controls */}
+          <div className="flex gap-1.5 flex-shrink-0">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
+            <span className="w-2.5 h-2.5 rounded-full bg-[#febc2e]" />
+            <span className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
+          </div>
         </div>
       </div>
-      <pre className="bg-[#0e0e12] text-[var(--color-muted)] p-4 font-[var(--mono)] text-xs leading-relaxed overflow-x-auto m-0">
+      <pre className="bg-[#0e0e12] text-[var(--color-muted)] p-4 font-[var(--mono)] text-xs leading-relaxed overflow-x-auto m-0 tab-size-2">
         <code className="whitespace-pre break-normal">{code}</code>
       </pre>
     </div>
   )
+}
 
   // Sidebar content
   const SidebarContent = () => (
