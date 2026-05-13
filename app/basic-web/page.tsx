@@ -81,7 +81,7 @@ function CodeBlock({ filename, code, language = 'html', highlight }: CodeBlockPr
 
 export default function BasicWebDevPage() {
   // Navigation state
-  const [active, setActive] = useState<'outcomes' | 'html' | 'css' | 'tips'>('outcomes')
+  const [active, setActive] = useState<'outcomes' | 'html' | 'javascript' | 'css' | 'tips'>('outcomes')
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   
   // Tab states
@@ -113,7 +113,7 @@ export default function BasicWebDevPage() {
   }, [mobileMenuOpen])
   
   // Scroll to section
-  const goToSection = (id: 'outcomes' | 'html' | 'css' | 'tips') => {
+  const goToSection = (id: 'outcomes' | 'html' | 'javascript' | 'css' | 'tips') => {
     setActive(id)
     setMobileMenuOpen(false)
     const el = document.getElementById(id)
@@ -143,7 +143,7 @@ export default function BasicWebDevPage() {
   
   // Scroll spy
   useEffect(() => {
-    const ids = ['outcomes', 'html', 'css', 'tips']
+    const ids = ['outcomes', 'html', 'javascript', 'css', 'tips']
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -244,6 +244,28 @@ export default function BasicWebDevPage() {
         ].map((link, i) => (
           <button
             key={`html-${i}`}
+            onClick={() => goToSection(link.id)}
+            className={`flex items-center gap-2 py-2 px-3 rounded-md text-sm font-medium transition-all w-full text-left ${
+              active === link.id
+                ? 'bg-[var(--color-lime)]/10 text-[var(--color-lime)] font-semibold'
+                : 'text-[var(--color-muted)] hover:bg-[var(--color-dark3)] hover:text-[var(--color-text)]'
+            }`}
+          >
+            <span className={`w-1.25 h-1.25 rounded-full bg-current flex-shrink-0 ${active === link.id ? 'opacity-100' : 'opacity-35'}`} />
+            {link.label}
+          </button>
+        ))}
+      </div>
+      
+      <div className="mb-6">
+        <div className="font-[var(--mono)] text-xs font-bold text-[var(--color-outline)] uppercase tracking-widest mb-2 pl-2">JavaScript</div>
+        {[
+          { label: 'What is JS?', id: 'javascript' as const },
+          { label: 'Functions', id: 'javascript' as const },
+          { label: 'Variables', id: 'javascript' as const },
+        ].map((link, i) => (
+          <button
+            key={`js-${i}`}
             onClick={() => goToSection(link.id)}
             className={`flex items-center gap-2 py-2 px-3 rounded-md text-sm font-medium transition-all w-full text-left ${
               active === link.id
@@ -949,6 +971,265 @@ const submitForm = async (formData) => {
 />
 <p id="out"></p>`}
             />
+          </section>
+
+          {/* ══ JAVASCRIPT ══ */}
+          <section id="javascript" className="mb-12 md:mb-16 scroll-mt-24">
+            <div className="flex items-start gap-3 md:gap-4 mb-5 md:mb-6">
+              <span className="font-[var(--mono)] text-xs text-[var(--color-muted)] bg-[var(--color-dark3)] border border-[var(--color-outline)] py-1 px-2 rounded whitespace-nowrap mt-0.5">Refresher</span>
+              <div>
+                <h2 className="font-[var(--sans)] text-lg md:text-xl font-bold leading-tight tracking-tight mb-0.5">JavaScript — The Language of the Web</h2>
+                <p className="text-sm text-[var(--color-muted)]">Add interactivity and dynamic behavior to your web pages.</p>
+              </div>
+            </div>
+
+            <div className="prose">
+              <h3 className="font-[var(--sans)] text-base font-semibold mt-6 md:mt-8 mb-2 text-[var(--color-text)]">What is JavaScript?</h3>
+              <p className="mb-3 md:mb-4 text-sm leading-relaxed text-[var(--color-text)]">
+                JavaScript is a programming language created by Brendan Eich in 1995. It was famously designed in about 10 days, which explains some of its quirks and design trade-offs.
+              </p>
+              <p className="mb-3 md:mb-4 text-sm leading-relaxed text-[var(--color-text)]">
+                The language was inspired by the Scheme programming language and was intended to be approachable, flexible, and easy to embed into web pages. One of its main highlights is its familiar syntax, which resembles Java and other C-like languages, making it easier for beginners to pick up.
+              </p>
+              <p className="mb-3 md:mb-4 text-sm leading-relaxed text-[var(--color-text)]">
+                JavaScript supports multiple programming paradigms:
+              </p>
+              <ul className="list-disc list-inside space-y-1 mb-4 text-sm text-[var(--color-text)]">
+                <li>Object-Oriented Programming (OOP)</li>
+                <li>Procedural Programming</li>
+                <li>Functional Programming (FP)</li>
+              </ul>
+              <p className="mb-3 md:mb-4 text-sm leading-relaxed text-[var(--color-text)]">
+                Because it supports functional programming, functions are first-class citizens. This means functions can be:
+              </p>
+              <ul className="list-disc list-inside space-y-1 mb-4 text-sm text-[var(--color-text)]">
+                <li>Stored in variables</li>
+                <li>Passed as arguments</li>
+                <li>Returned from other functions</li>
+              </ul>
+              <p className="mb-3 md:mb-4 text-sm leading-relaxed text-[var(--color-text)]">
+                In JavaScript, functions are treated just like any other value.
+              </p>
+            </div>
+
+            {/* Where is JS used */}
+            <div className="prose">
+              <h3 className="font-[var(--sans)] text-base font-semibold mt-6 md:mt-8 mb-2 text-[var(--color-text)]">Where is JavaScript used?</h3>
+              <p className="mb-3 md:mb-4 text-sm leading-relaxed text-[var(--color-text)]">
+                JavaScript is most commonly used in web browsers. It was designed for scripting tasks such as manipulating elements in an HTML document, responding to user actions, and updating content dynamically without reloading the page.
+              </p>
+            </div>
+
+            {/* Simple Example */}
+            <h3 className="font-[var(--sans)] text-base font-semibold mt-6 md:mt-8 mb-2 text-[var(--color-text)]">A Simple Example</h3>
+            <CodeBlock
+              filename="interactive.html"
+              language="html"
+              code={`<html>
+  <body>
+
+    <p id="greeting">Hello</p>
+
+    <button onclick="changeText()">Click me</button>
+
+    <script>
+      function changeText() {
+        document.getElementById("greeting").innerText = "Hello World";
+      }
+    </script>
+
+  </body>
+</html>`}
+            />
+
+            {/* Callout - What happens */}
+            <div className="border-l-3 border-[var(--color-lime)] bg-[var(--color-lime)]/5 rounded-r-lg py-2.5 px-3 my-5 md:my-6">
+              <div className="font-[var(--mono)] text-xs font-bold text-[var(--color-lime)] tracking-widest uppercase mb-1">🔍 What happens when the button is clicked?</div>
+              <ol className="text-sm text-[var(--color-muted)] leading-relaxed space-y-2 m-0 list-decimal list-inside">
+                <li><strong>The button triggers changeText()</strong> — The <code className="font-[var(--mono)] text-xs bg-[var(--color-dark3)] border border-[var(--color-outline)] text-[var(--color-lime)] px-1 py-0.5 rounded">onclick</code> attribute tells the browser: "When this button is clicked, call the function named <code className="font-[var(--mono)] text-xs bg-[var(--color-dark3)] border border-[var(--color-outline)] text-[var(--color-lime)] px-1 py-0.5 rounded">changeText</code>."</li>
+                <li><strong>document represents the page</strong> — <code className="font-[var(--mono)] text-xs bg-[var(--color-dark3)] border border-[var(--color-outline)] text-[var(--color-lime)] px-1 py-0.5 rounded">document</code> is a global object provided by the browser. It represents the entire HTML page loaded in the tab and acts as the entry point to the DOM (Document Object Model) — the browser's in-memory tree of all elements on the page.</li>
+                <li><strong>getElementById("greeting") finds the element</strong> — This method searches the DOM and returns the element whose id matches "greeting". In this case, it returns the <code className="font-[var(--mono)] text-xs bg-[var(--color-dark3)] border border-[var(--color-outline)] text-[var(--color-lime)] px-1 py-0.5 rounded">&lt;p&gt;</code> element.</li>
+                <li><strong>.innerText = "Hello World" updates the page</strong> — Once you have a reference to the element, you can modify its properties. Changing <code className="font-[var(--mono)] text-xs bg-[var(--color-dark3)] border border-[var(--color-outline)] text-[var(--color-lime)] px-1 py-0.5 rounded">innerText</code> immediately updates the visible text on the page — no reload required.</li>
+              </ol>
+            </div>
+
+            {/* Other DOM manipulations */}
+            <div className="prose">
+              <h4 className="text-sm font-semibold text-[var(--color-text)] mb-2">Other things you can do with elements</h4>
+              <ul className="list-disc list-inside space-y-1 mb-4 text-sm text-[var(--color-muted)]">
+                <li><code className="font-[var(--mono)] text-xs bg-[var(--color-dark3)] border border-[var(--color-outline)] text-[var(--color-lime)] px-1 py-0.5 rounded">element.innerHTML = "&lt;span&gt;Hello&lt;/span&gt; World"</code> — insert HTML</li>
+                <li><code className="font-[var(--mono)] text-xs bg-[var(--color-dark3)] border border-[var(--color-outline)] text-[var(--color-lime)] px-1 py-0.5 rounded">element.style.color = "red"</code> — modify CSS styles</li>
+                <li><code className="font-[var(--mono)] text-xs bg-[var(--color-dark3)] border border-[var(--color-outline)] text-[var(--color-lime)] px-1 py-0.5 rounded">element.appendChild(newNode)</code> — add child elements dynamically</li>
+              </ul>
+            </div>
+
+            {/* Why IDs unique */}
+            <div className="border-l-3 border-[var(--color-purple)] bg-[var(--color-purple)]/5 rounded-r-lg py-2.5 px-3 my-5 md:my-6">
+              <div className="font-[var(--mono)] text-xs font-bold text-[var(--color-purple)] tracking-widest uppercase mb-1">⚠️ Why must IDs be unique?</div>
+              <p className="text-sm text-[var(--color-muted)] leading-relaxed m-0">
+                <code className="font-[var(--mono)] text-xs bg-[var(--color-dark3)] border border-[var(--color-outline)] text-[var(--color-lime)] px-1 py-0.5 rounded">getElementById</code> is designed to return one element. If multiple elements share the same id, behavior becomes unpredictable. More importantly, the HTML specification states that duplicate IDs are invalid. CSS selectors, accessibility tools (like screen readers), and automated tests all rely on IDs being unique. Duplicate IDs can lead to subtle bugs that are very difficult to debug.
+              </p>
+            </div>
+
+            {/* Functions Section */}
+            <h3 className="font-[var(--sans)] text-base font-semibold mt-6 md:mt-8 mb-2 text-[var(--color-text)]">JavaScript Basics: Functions</h3>
+            <div className="prose">
+              <p className="mb-3 md:mb-4 text-sm leading-relaxed text-[var(--color-text)]">
+                Functions are one of the core building blocks of JavaScript.
+              </p>
+              <p className="mb-3 md:mb-4 text-sm leading-relaxed text-[var(--color-text)]">
+                A function is a reusable block of code that runs when it is called. There are two main steps:
+              </p>
+              <ol className="list-decimal list-inside space-y-1 mb-4 text-sm text-[var(--color-text)]">
+                <li>Declare the function</li>
+                <li>Call the function</li>
+              </ol>
+            </div>
+
+            <CodeBlock
+              filename="function-basics.js"
+              language="javascript"
+              code={`function changeText(id) {
+  // function body
+  return "something";
+}`}
+            />
+
+            <div className="prose">
+              <p className="mb-3 md:mb-4 text-sm leading-relaxed text-[var(--color-text)]">
+                A function declaration consists of:
+              </p>
+              <ul className="list-disc list-inside space-y-1 mb-4 text-sm text-[var(--color-text)]">
+                <li>The function body</li>
+                <li>Parameters</li>
+                <li>A return value</li>
+              </ul>
+            </div>
+
+            {/* Function body */}
+            <h4 className="font-[var(--sans)] text-sm font-semibold mt-4 mb-2 text-[var(--color-text)]">1. Function body</h4>
+            <p className="mb-3 md:mb-4 text-sm leading-relaxed text-[var(--color-text)]">
+              The code inside <code className="font-[var(--mono)] text-xs bg-[var(--color-dark3)] border border-[var(--color-outline)] text-[var(--color-lime)] px-1 py-0.5 rounded">{`{ }`}</code> runs every time the function is called.
+            </p>
+
+            {/* Parameters */}
+            <h4 className="font-[var(--sans)] text-sm font-semibold mt-4 mb-2 text-[var(--color-text)]">2. Parameters (arguments)</h4>
+            <p className="mb-3 md:mb-4 text-sm leading-relaxed text-[var(--color-text)]">
+              Parameters are inputs passed into a function.
+            </p>
+            <CodeBlock
+              filename="parameters.js"
+              language="javascript"
+              code={`function greet(name) {
+  return "Hello, " + name;
+}
+// Calling greet("Aiman") assigns "Aiman" to name
+
+// Multiple parameters:
+function add(a, b) {
+  return a + b;
+}`}
+            />
+            <p className="mb-3 md:mb-4 text-sm leading-relaxed text-[var(--color-text)]">
+              If you pass fewer arguments than expected, the missing ones become <code className="font-[var(--mono)] text-xs bg-[var(--color-dark3)] border border-[var(--color-outline)] text-[var(--color-lime)] px-1 py-0.5 rounded">undefined</code>. JavaScript allows this silently, which can sometimes cause bugs if you're not careful.
+            </p>
+
+            {/* Return value */}
+            <h4 className="font-[var(--sans)] text-sm font-semibold mt-4 mb-2 text-[var(--color-text)]">3. Return value</h4>
+            <p className="mb-3 md:mb-4 text-sm leading-relaxed text-[var(--color-text)]">
+              The <code className="font-[var(--mono)] text-xs bg-[var(--color-dark3)] border border-[var(--color-outline)] text-[var(--color-lime)] px-1 py-0.5 rounded">return</code> statement sends a value back to the caller and immediately exits the function.
+            </p>
+            <CodeBlock
+              filename="return.js"
+              language="javascript"
+              code={`function add(a, b) {
+  return a + b;
+  console.log("this never runs"); // unreachable code
+}
+
+let result = add(3, 4); // 7
+// If there is no return, the function returns undefined`}
+            />
+
+            {/* Calling a function */}
+            <h4 className="font-[var(--sans)] text-sm font-semibold mt-4 mb-2 text-[var(--color-text)]">Calling a function</h4>
+            <CodeBlock
+              filename="calling.js"
+              language="javascript"
+              code={`function greet(name) {
+  return "Hello, " + name;
+}
+
+greet("Aiman");               // return value ignored
+let msg = greet("Aiman");     // return value stored
+console.log(msg);             // "Hello, Aiman"
+
+// This is exactly what happens with onclick="changeText()" in HTML
+// — the browser calls the function automatically when the event occurs.`}
+            />
+
+            {/* Variables Section */}
+            <h3 className="font-[var(--sans)] text-base font-semibold mt-6 md:mt-8 mb-2 text-[var(--color-text)]">Variables</h3>
+            <div className="prose">
+              <p className="mb-3 md:mb-4 text-sm leading-relaxed text-[var(--color-text)]">
+                Variables store data such as numbers, strings, arrays, and objects.
+              </p>
+            </div>
+            <CodeBlock
+              filename="variables.js"
+              language="javascript"
+              code={`let a = "Hello World";
+console.log(a); // Hello World
+
+// What's happening:
+// let a = "Hello World" declares a variable and assigns a value to it.
+// console.log(a) prints the value to the developer console.`}
+            />
+
+            {/* Programming vs math */}
+            <div className="border-l-3 border-[var(--color-lime)] bg-[var(--color-lime)]/5 rounded-r-lg py-2.5 px-3 my-5 md:my-6">
+              <div className="font-[var(--mono)] text-xs font-bold text-[var(--color-lime)] tracking-widest uppercase mb-1">🧮 Programming vs Mathematics</div>
+              <p className="text-sm text-[var(--color-muted)] leading-relaxed m-0">
+                In mathematics: <code className="font-[var(--mono)] text-xs bg-[var(--color-dark3)] border border-[var(--color-outline)] text-[var(--color-lime)] px-1 py-0.5 rounded">x = 5</code> means "x is always 5". In programming: <code className="font-[var(--mono)] text-xs bg-[var(--color-dark3)] border border-[var(--color-outline)] text-[var(--color-lime)] px-1 py-0.5 rounded">x = 5; x = 10;</code> means "store 5 in x, then later replace it with 10".
+              </p>
+            </div>
+
+            <CodeBlock
+              filename="reassignment.js"
+              language="javascript"
+              code={`let x = 5;
+x = 10;
+console.log(x); // 10`}
+            />
+
+            {/* let vs const */}
+            <h4 className="font-[var(--sans)] text-sm font-semibold mt-4 mb-2 text-[var(--color-text)]">let vs const</h4>
+            <p className="mb-3 md:mb-4 text-sm leading-relaxed text-[var(--color-text)]">
+              JavaScript provides two main keywords for variables:
+            </p>
+            <ul className="list-disc list-inside space-y-1 mb-4 text-sm text-[var(--color-text)]">
+              <li><code className="font-[var(--mono)] text-xs bg-[var(--color-dark3)] border border-[var(--color-outline)] text-[var(--color-lime)] px-1 py-0.5 rounded">let</code> — value can change</li>
+              <li><code className="font-[var(--mono)] text-xs bg-[var(--color-dark3)] border border-[var(--color-outline)] text-[var(--color-lime)] px-1 py-0.5 rounded">const</code> — value cannot be reassigned</li>
+            </ul>
+            <CodeBlock
+              filename="let-const.js"
+              language="javascript"
+              code={`let score = 0;
+score = 10; // allowed
+
+const MAX_SCORE = 100;
+MAX_SCORE = 200; // error: Assignment to constant variable`}
+            />
+
+            {/* Activity */}
+            <div className="bg-[var(--color-dark2)] border border-[var(--color-outline)] rounded-lg py-3 px-4 my-4 md:my-5">
+              <div className="flex items-center gap-1 font-[var(--mono)] text-xs font-bold tracking-widest uppercase text-[var(--color-yellow)] mb-2">🧑‍💻 Activities</div>
+              <ul className="pl-5 space-y-1">
+                <li className="text-sm leading-relaxed text-[var(--color-muted)]">Create a function that takes a name and returns a personalized greeting.</li>
+                <li className="text-sm leading-relaxed text-[var(--color-muted)]">Use <code className="font-[var(--mono)] text-xs bg-[var(--color-dark3)] border border-[var(--color-outline)] text-[var(--color-lime)] px-1 py-0.5 rounded">getElementById</code> to change the text of an element when a button is clicked.</li>
+                <li className="text-sm leading-relaxed text-[var(--color-muted)]">Experiment with <code className="font-[var(--mono)] text-xs bg-[var(--color-dark3)] border border-[var(--color-outline)] text-[var(--color-lime)] px-1 py-0.5 rounded">let</code> vs <code className="font-[var(--mono)] text-xs bg-[var(--color-dark3)] border border-[var(--color-outline)] text-[var(--color-lime)] px-1 py-0.5 rounded">const</code> — try reassigning both and observe what happens.</li>
+              </ul>
+            </div>
           </section>
 
           {/* ══ CSS ══ */}
